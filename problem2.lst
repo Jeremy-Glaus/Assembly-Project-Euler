@@ -1,0 +1,51 @@
+     1                                  ; How it works:
+     2                                  ; Calculates Fibonacci
+     3                                  ; check if it exeeds 4 million
+     4                                  ; check if even
+     5                                  ; if true, add to sum
+     6                                  
+     7                                  ; Registers
+     8                                  ; rdx number 1
+     9                                  ; rbp number 2
+    10                                  ; rsp sum
+    11                                  ; rdi temporary sum for checking 
+    12                                  
+    13                                  section .bss
+    14                                  
+    15                                  section .data
+    16                                  
+    17                                  section .text
+    18                                  
+    19                                  global _start
+    20                                  
+    21                                  _start:
+    22 00000000 B801000000                  mov rax, 1
+    23 00000005 BD01000000                  mov rbp, 1
+    24 0000000A 4831E4                      xor rsp, rsp        ;resets rsp
+    25                                  
+    26                                  calculate:
+    27                                      ;new values
+    28 0000000D 4889E8                      mov rax, rbp        ; old number to rax
+    29 00000010 4889FD                      mov rbp, rdi        ; new fibonacci to rbp
+    30                                  
+    31                                      ;calculate fibonacci
+    32 00000013 4831FF                      xor rdi, rdi        ;clear rdx (temporary register)
+    33 00000016 4889C7                      mov rdi, rax        ;mov first number of sequence to rdx
+    34 00000019 4801EF                      add rdi, rbp        ;add second number of sequence. result in rdx
+    35                                  
+    36                                      ;check if sum is even
+    37 0000001C 48F7C701000000              test rdi, 1         ;test rdx for first bit. if set, number is even
+    38 00000023 75E8                        jnz calculate       ;restart calculation if number is odd
+    39                                  
+    40                                      ;check if it exeeds 4million
+    41 00000025 4881FF00093D00              cmp rdi, 4000000     ;compare rdi with 4 million
+    42 0000002C 7D05                        jge exit             ;jump to exit if greater or equal 4 million
+    43                                  
+    44                                      ;saving the sum
+    45 0000002E 4801FC                      add rsp, rdi        ;saves new sum to rsp
+    46 00000031 EBDA                        jmp calculate       ;start again
+    47                                  
+    48                                  exit: 
+    49 00000033 B83C000000                  mov rax, 60         ; code for sys_exit
+    50 00000038 BF00000000                  mov rdi, 0          ; returning 0 in sys_exit
+    51 0000003D 0F05                        syscall     
