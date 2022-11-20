@@ -44,7 +44,5 @@ The second solution in assembly I found doesn't use the concept of a for loop. I
 ### Issues
 Due do the problem with the integer cast described in Problem 1, there is no output of the program and the value has to be red out of gdb.
 
-### Questions
-
-
 ### Comparason with other solutions
+Comparing my code with other solutions, I discovered the ``xadd`` instruction. This instruction swaps the values from the registers and adds them together in a second step. Using this, the code can be made a little smaller.
